@@ -6,7 +6,14 @@
 
 <html lang="en" class="no-js">
 	<head>
-			
+	
+	<style>
+	tr {
+	padding: 10px;
+}
+td{
+vertical-align: top;}
+	</style>		
 		<meta charset="UTF-8" />
 		
 		<%@ include file="/WEB-INF/jsp/js/pageJS.jsp" %>
@@ -82,7 +89,7 @@
 				<h1>${product_name}</h1>
 							</header>
 			<ul class="cbp-vimenu">
-				<li><a href="#" class="icon-logo">Logo</a></li>
+				<li><a href="/	" class="icon-logo">Logo</a></li>
 				
 				<li><a href="#" class="icon-search">Search</a></li>
 				<li><a href="#" class="icon-pencil">Pencil</a></li>
@@ -97,6 +104,35 @@
 				
 				<h2>Sentiment Review Monitor</h2>
 				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				
+				<h2>Attribute Review Score</h2>
+		<table class="table table-striped table-bordered table-condensed">
+		<tr >
+			<td>Flash</td>
+			<td ><div class="progress">
+  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+    <span class="sr-only">60% Complete</span>
+  </div>
+</div></td>
+		</tr>
+		<tr >
+			<td width="50%">Lens</td>
+			<td><div class="progress">
+  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 89%;">
+    <span class="sr-only">60% Complete</span>
+  </div>
+</div></td>
+		</tr>
+		<tr >
+			<td width="50%">Mega Pixel</td>
+			<td><div class="progress">
+  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 37%;">
+    <span class="sr-only">60% Complete</span>
+  </div>
+</div></td>
+		</tr>
+		</table>
+		
 				<div width = "100%">
 				<h2>Positive Reviews</h2>
 				<table border ="0" width="100%">
@@ -112,7 +148,7 @@
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseOne" class="panel-collapse collapse in ">
+			    <div id="collapseOne" class="panel-collapse collapse ">
 			      <div class="panel-body">
 			        	${entry}
 			      </div>
@@ -141,7 +177,7 @@
 			    </div>
 			  </div>
 			  </div>						
-               		</td></tr>
+			</td></tr>
 				 </c:if>
 					
 				</c:forEach>
@@ -190,11 +226,8 @@
         </div>
     	</div>
     	
-		<h2>Attribute Review Score</h2>
-		<div class="row">		
-			<div class="span2"><img src="http://placehold.it/260x180"></div>
-			<div class="span6"><img src="http://placehold.it/260x180"></div>
-		</div>
+		
+		
     	</div>									
 	</div>			
 			
