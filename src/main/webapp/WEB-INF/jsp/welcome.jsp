@@ -1,7 +1,15 @@
 <!DOCTYPE html>
+
+<%@page import="java.util.List"%>
+<%@page import="java.util.Arrays"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <html lang="en" class="no-js">
 	<head>
+			
 		<meta charset="UTF-8" />
+		<link type="text/css" href="${path}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+		<%@ include file="/WEB-INF/jsp/js/pageJS.jsp" %>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<title>Walmart Review Monitor</title>
@@ -82,11 +90,37 @@
 			<div class="main">
 				
 				<h2>Review Sentiment Monitor</h2>
-				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>				
-			</div>
-			
+				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				<div width = "100%">
+				<h2>Positive Reviews</h2>
+				<table border ="1">
+				<c:forEach items="${positive_reviews}" var="entry" varStatus="val">
+				 <c:if test="${val.count % 2 == 0}">
+				 <tr><td style="padding: 3px" class="even">						
+						${entry}
+               		</td></tr>
+				 </c:if>
+				 <c:if test="${val.count % 2 != 0}">
+				 <tr><td style="padding: 3px" class="odd">						
+						${entry}
+               		</td></tr>
+				 </c:if>
+					
+				</c:forEach>
+					
+				</table>
+				</div>	
+				<div>
+				<h2>Negative Reviews</h2>
+				<table>
+					<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+						<tr><td>
+						<c:out value="${entry}" />
+	               		</td></tr>
+					</c:forEach>
+				</table>
+				</div>								
+			</div>			
 		</div>
-		
-  
 	</body>
 </html>
