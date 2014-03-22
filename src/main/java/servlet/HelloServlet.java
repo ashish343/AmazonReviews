@@ -68,11 +68,15 @@ public class HelloServlet extends HttpServlet {
 
 	public HashMap<String, Integer> getData() throws ClassNotFoundException,
 			SQLException {
-
-		resultSet = statement.executeQuery(posNegQuery);
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		while (resultSet.next()) {
-			map.put(resultSet.getString("x"), resultSet.getInt("count"));
+		try {
+			resultSet = statement.executeQuery(posNegQuery);
+
+			while (resultSet.next()) {
+				map.put(resultSet.getString("x"), resultSet.getInt("count"));
+			}
+		} catch (Exception e) {
+			System.out.println("HelloServlet.getData()");
 		}
 		return map;
 	}
