@@ -39,7 +39,7 @@
 		            plotShadow: false
 		        },
 		        title: {
-		            text: 'Reviews Sentiment Meter'
+		            text: 'Sentiment Review Meter'
 		        },
 		        tooltip: {
 		    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -79,12 +79,12 @@
 		<div class="container">
 			<header class="clearfix">
 				
-				<h1>Walmart Review Monitor</h1>
+				<h1>${product_name}</h1>
 							</header>
 			<ul class="cbp-vimenu">
 				<li><a href="#" class="icon-logo">Logo</a></li>
 				
-				<li><a href="/product" class="icon-search">Search</a></li>
+				<li><a href="#" class="icon-search">Search</a></li>
 				<li><a href="#" class="icon-pencil">Pencil</a></li>
 				<!-- Example for active item:
 				<li class="cbp-vicurrent"><a href="#" class="icon-pencil">Pencil</a></li>
@@ -95,9 +95,106 @@
 			</ul>
 			<div class="main">
 				
-				<h2>Review Sentiment Monitor</h2>
+				<h2>Sentiment Review Monitor</h2>
 				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				<div width = "100%">
+				<h2>Positive Reviews</h2>
+				<table border ="0" width="100%">
+				<c:forEach items="${positive_reviews}" var="entry" varStatus="val">
+				 <c:if test="${val.count == 1}">
+				 <tr><td style="padding: 3px" class="even">
+		 		<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+			          Canon improved the high ISO performance, providing a 1 to 1.5 stop improvement.
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseOne" class="panel-collapse collapse in ">
+			      <div class="panel-body">
+			        	${entry}
+			      </div>
+			    </div>
+			  </div>
+			  </div>						
+					
+               		</td></tr>
+				 </c:if>
+				 <c:if test="${val.count  != 1}">
+				 <tr><td style="padding: 3px" class="odd">
+				 				
+ 				<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			          Summary ${val.count}
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapse${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry}
+			      </div>
+			    </div>
+			  </div>
+			  </div>						
+               		</td></tr>
+				 </c:if>
+					
+				</c:forEach>
+					
+				</table>
+				</div>	
+				<div>
+				<h2>Negative Reviews</h2>
+				<table width="100%">
+					<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+						<tr><td>
+						<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			          Summary ${val.count}
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapse${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry}
+			      </div>
+			    </div>
+			  </div>
+			  </div>	
+						
+	               		</td></tr>
+					</c:forEach>
+				</table>
+				</div>
 				
+			<!-- Product Page -->	
+				
+				
+			
+		<h2>Delivery Issues</h2>
+		
+    <div class="row"  style="padding: 10px">
+      <div class="span2" ><img src="http://placehold.it/180x120"></div>
+      <div class="span6" >asdasdasd as kjahs dkajlkajshadl ksjdhakl sjdhakl sskdksdhals k
+      a s;lkdjas ;lkdjas;lkdj as;lkdja ;lskdjal;skjdal;skjdal;ksj da;lksjda;lksj d;alsdj a
+       alskjda;sldkjas;lkdja;lskdja;lsk dja;lskdja ;lskdja ;slkdjas;dljka s
+        al;skdja;sldkja ;slkdja ;lskdja;slkjda;ls dkjas
+        </div>
+    	</div>
+    	
+		<h2>Attribute Review Score</h2>
+		<div class="row">		
+			<div class="span2"><img src="http://placehold.it/260x180"></div>
+			<div class="span6"><img src="http://placehold.it/260x180"></div>
+		</div>
     	</div>									
 	</div>			
 			
