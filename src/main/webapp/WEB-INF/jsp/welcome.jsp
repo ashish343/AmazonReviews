@@ -46,10 +46,10 @@
 		            type: 'pie',
 		            name: 'Review Share',
 		            data: [
-		                ['Positive',  343],		                
+		                ['Positive',  ${map.positive}],		                
 		                {
 		                    name: 'Negative',
-		                    y: 128,
+		                    y: ${map.negative},
 		                    sliced: true,
 		                    selected: true
 		                }
