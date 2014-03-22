@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>servlet  .HelloServlet</servlet-class>
+        <servlet-class>servlet.HelloServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 </web-app>
