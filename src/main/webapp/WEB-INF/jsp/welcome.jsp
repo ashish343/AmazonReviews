@@ -28,7 +28,10 @@
 		<link href="/resources/css/component.css" rel="stylesheet">
 		<link type="text/css" href="${path}/resources/css/bootstrap.min.css" rel="stylesheet"/>
 		<link type="text/css" href="${path}/resources/css/bootstrap-responsive.min.css" rel="stylesheet"/>
-		
+		<style>
+		.row{
+		padding:5px;
+		}</style>
 		<script>
 		
 		$(function () {
@@ -95,8 +98,35 @@
 			</ul>
 			<div class="main">
 				
-				<h2>Review Sentiment Monitor</h2>
+				<h2>General Review Sentiment Monitor</h2>
 				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				
+				
+				<h2>Delivery Issues</h2>
+				
+				
+				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+				<div class="row">
+				<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			          ${entry.display_text}
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapse${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry.review}
+			      </div>
+			    </div>
+			  </div>
+			  </div>
+			  </div>	
+				</c:forEach>
+				
+					
 				
     	</div>									
 	</div>			

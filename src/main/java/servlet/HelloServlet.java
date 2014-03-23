@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,15 +24,17 @@ public class HelloServlet extends HttpServlet {
 	private static Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String posNegQuery = "select if(positivity>=0.5,'positive','negative') x, count(*) count from ProductReviews  group by x;";
+	private static final String posNegQuery = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews  group by x;";
 	private static final String reviews = "select review from ProductReviews ";
 
-	static {
+	public static void getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager
-					.getConnection("jdbc:mysql://localhost/test?" + "user=root");
-			statement = connect.createStatement();
+			if (connect == null)
+				connect = DriverManager
+						.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
+								+ "user=b174f8f64c67e5&" + "password=d2a1f516");
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -45,12 +48,19 @@ public class HelloServlet extends HttpServlet {
 
 		try {
 			HashMap<String, Integer> map = getData();
+
+			Object[] arr = getDeliveryReviews();
+			ArrayList<Map<String, String>> pos = (ArrayList<Map<String, String>>) arr[0];
+			ArrayList<Map<String, String>> neg = (ArrayList<Map<String, String>>) arr[1];
+			System.out.println(map.keySet());
 			// handler to avoid empty data
-			if (statement == null) {
+			if (map.keySet().size() == 0) {
 				map.put("positive", 200);
-				map.put("negative", 100);
+				map.put("negative", 200);
 			}
 			request.setAttribute("map", map);
+			request.setAttribute("positive_reviews", pos);
+			request.setAttribute("negative_reviews", neg);
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -66,12 +76,15 @@ public class HelloServlet extends HttpServlet {
 			SQLException {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		try {
+			getConnection();
+			statement = connect.createStatement();
 			resultSet = statement.executeQuery(posNegQuery);
 
 			while (resultSet.next()) {
 				map.put(resultSet.getString("x"), resultSet.getInt("count"));
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("HelloServlet.getData()");
 		}
 		return map;
@@ -100,6 +113,30 @@ public class HelloServlet extends HttpServlet {
 			text = text.replace("\"", "");
 			arr.add(text);
 		}
+		return arr;
+	}
+
+	public Object[] getDeliveryReviews() throws SQLException {
+		String query = "select * from review_classification where display_text!=''";
+		getConnection();
+		resultSet = statement.executeQuery(query);
+		Object arr[] = new Object[2];
+		ArrayList<Map<String, String>> positiveReviews = new ArrayList<Map<String, String>>();
+		ArrayList<Map<String, String>> negReviews = new ArrayList<Map<String, String>>();
+		while (resultSet.next()) {
+			float polarity = resultSet.getFloat("polarity");
+			String displayText = resultSet.getString("display_text");
+			String review = resultSet.getString("review");
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("review", review);
+			map.put("display_text", displayText);
+			if (polarity >= -0.15)
+				positiveReviews.add(map);
+			else
+				negReviews.add(map);
+		}
+		arr[0] = positiveReviews;
+		arr[1] = negReviews;
 		return arr;
 	}
 }
