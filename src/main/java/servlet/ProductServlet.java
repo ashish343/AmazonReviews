@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +25,7 @@ public class ProductServlet extends HttpServlet {
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 	private static final String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews  group by x;";
-	private static final String reviews = "select review from product_reviews ";
+	private static final String reviews = "select review, review_title from product_reviews ";
 	private static final String attrib_reviews = "select attribute, score from product_attribute_stats ";
 
 	public static void getConnection() throws InstantiationException,
@@ -34,7 +35,8 @@ public class ProductServlet extends HttpServlet {
 			if (connect == null || connect.isClosed())
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connect = DriverManager
-					.getConnection("jdbc:mysql://localhost/test?" + "user=root");
+					.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
+							+ "user=b174f8f64c67e5&" + "password=d2a1f516");
 			statement = connect.createStatement();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -56,9 +58,10 @@ public class ProductServlet extends HttpServlet {
 					request.setAttribute("attribMap", getAttribReviews(id));
 
 					request.setAttribute("positive_reviews",
-							getPositiveReviews(id).subList(0, 3));
+							getPositiveReviews(id));
 					request.setAttribute("negative_reviews",
-							getNegativeReviews(id).subList(0, 3));
+							getNegativeReviews(id));
+					request.setAttribute("product_name", getName(id));
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -88,7 +91,6 @@ public class ProductServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		request.getRequestDispatcher("/WEB-INF/jsp/product.jsp").forward(
 				request, response);
 	}
@@ -98,27 +100,36 @@ public class ProductServlet extends HttpServlet {
 			InstantiationException, IllegalAccessException {
 		String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' group by x;";
+		System.out.println(posNegReviewCount);
 		getConnection();
 		resultSet = statement.executeQuery(posNegReviewCount);
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("positive", 0);
+		map.put("negative", 0);
 		while (resultSet.next()) {
 			map.put(resultSet.getString("x"), resultSet.getInt("count"));
 		}
 		return map;
 	}
 
-	public ArrayList<String> getPositiveReviews(String id) throws SQLException,
-			InstantiationException, IllegalAccessException {
+	public ArrayList<HashMap<String, String>> getPositiveReviews(String id)
+			throws SQLException, InstantiationException, IllegalAccessException {
 		getConnection();
-		String query = reviews + " where positivity>" + 0 + "and retailer_id='"
-				+ id + "'";
+		String query = reviews + " where positivity>" + 0
+				+ " and retailer_id='" + id
+				+ "' order by positivity desc limit 10";
+		System.out.println(query);
 		resultSet = statement.executeQuery(query);
-		ArrayList<String> arr = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
+
 		while (resultSet.next()) {
+			HashMap<String, String> map = new HashMap<String, String>();
 			String text = resultSet.getString("review");
 			text = text.replace("\'", "");
 			text = text.replace("\"", "");
-			arr.add(text);
+			map.put("review", text);
+			map.put("display_text", resultSet.getString("review_title"));
+			arr.add(map);
 		}
 		return arr;
 	}
@@ -139,9 +150,9 @@ public class ProductServlet extends HttpServlet {
 		return arr;
 	}
 
-	public HashMap<String, Float> getAttribReviews(String id)
+	public TreeMap<String, Float> getAttribReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		HashMap<String, Float> map = new HashMap<String, Float>();
+		TreeMap<String, Float> map = new TreeMap<String, Float>();
 		getConnection();
 		String query = attrib_reviews + " where retailer_id='" + id + "'";
 		resultSet = statement.executeQuery(query);
@@ -154,4 +165,20 @@ public class ProductServlet extends HttpServlet {
 		}
 		return map;
 	}
+
+	public String getName(String id) throws SQLException,
+			InstantiationException, IllegalAccessException {
+
+		getConnection();
+		String query = "Select title from product_details where retailer_id='"
+				+ id + "'";
+		resultSet = statement.executeQuery(query);
+		String title = null;
+		while (resultSet.next()) {
+			title = resultSet.getString("title");
+		}
+
+		return title;
+	}
+
 }

@@ -106,78 +106,44 @@ vertical-align: top;}
 				
 				<h2>Attribute Review Score</h2>
 		<table class="table table-striped table-bordered table-condensed">
+		
+		<c:forEach items="${attribMap}" var="entry" varStatus="val">
 		<tr >
-			<td>Flash</td>
+			<td width="50%">${entry.key}</td>
 			<td ><div class="progress">
-  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ${entry.value*100}%;">
     <span class="sr-only">60% Complete</span>
   </div>
 </div></td>
 		</tr>
-		<tr >
-			<td width="50%">Lens</td>
-			<td><div class="progress">
-  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 89%;">
-    <span class="sr-only">60% Complete</span>
-  </div>
-</div></td>
-		</tr>
-		<tr >
-			<td width="50%">Mega Pixel</td>
-			<td><div class="progress">
-  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 37%;">
-    <span class="sr-only">60% Complete</span>
-  </div>
-</div></td>
-		</tr>
+		</c:forEach>
 		</table>
 		
 				<div width = "100%">
 				<h2>Positive Reviews</h2>
 				<table border ="0" width="100%">
 				<c:forEach items="${positive_reviews}" var="entry" varStatus="val">
-				 <c:if test="${val.count == 1}">
+				 
 				 <tr><td style="padding: 3px" class="even">
 		 		<div class="panel-group" id="accordion">
 			  	<div class="panel panel-default">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-			          Canon improved the high ISO performance, providing a 1 to 1.5 stop improvement.
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			          ${entry.display_text }
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseOne" class="panel-collapse collapse ">
+			    <div id="collapse${val.count}" class="panel-collapse collapse ">
 			      <div class="panel-body">
-			        	${entry}
+			        	${entry.review}
 			      </div>
 			    </div>
 			  </div>
 			  </div>						
 					
                		</td></tr>
-				 </c:if>
-				 <c:if test="${val.count  != 1}">
-				 <tr><td style="padding: 3px" class="odd">
-				 				
- 				<div class="panel-group" id="accordion">
-			  	<div class="panel panel-default">
-			    <div class="panel-heading">
-			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
-			          Summary ${val.count}
-			        </a>
-			      </h4>
-			    </div>
-			    <div id="collapse${val.count}" class="panel-collapse collapse ">
-			      <div class="panel-body">
-			        	${entry}
-			      </div>
-			    </div>
-			  </div>
-			  </div>						
-			</td></tr>
-				 </c:if>
+				 
 					
 				</c:forEach>
 					
