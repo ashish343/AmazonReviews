@@ -27,13 +27,15 @@ public class HelloServlet extends HttpServlet {
 	private static final String posNegQuery = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews  group by x;";
 	private static final String reviews = "select review from ProductReviews ";
 
-	public static void getConnection() {
+	public static void getConnection() throws InstantiationException,
+			IllegalAccessException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			if (connect == null)
-				connect = DriverManager
-						.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
-								+ "user=b174f8f64c67e5&" + "password=d2a1f516");
+
+			if (connect == null || connect.isClosed())
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+			connect = DriverManager
+					.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
+							+ "user=b174f8f64c67e5&" + "password=d2a1f516");
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -65,6 +67,12 @@ public class HelloServlet extends HttpServlet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -116,8 +124,9 @@ public class HelloServlet extends HttpServlet {
 		return arr;
 	}
 
-	public Object[] getDeliveryReviews() throws SQLException {
-		String query = "select * from review_classification where display_text!=''";
+	public Object[] getDeliveryReviews() throws SQLException,
+			InstantiationException, IllegalAccessException {
+		String query = "select * from review_classification where display_text!='' order by polarity desc";
 		getConnection();
 		resultSet = statement.executeQuery(query);
 		Object arr[] = new Object[2];

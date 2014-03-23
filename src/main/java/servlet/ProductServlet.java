@@ -27,13 +27,14 @@ public class ProductServlet extends HttpServlet {
 	private static final String reviews = "select review from product_reviews ";
 	private static final String attrib_reviews = "select attribute, score from product_attribute_stats ";
 
-	public static void getConnection() {
+	public static void getConnection() throws InstantiationException,
+			IllegalAccessException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			if (connect == null)
-				connect = DriverManager
-						.getConnection("jdbc:mysql://localhost/test?"
-								+ "user=root");
+
+			if (connect == null || connect.isClosed())
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+			connect = DriverManager
+					.getConnection("jdbc:mysql://localhost/test?" + "user=root");
 			statement = connect.createStatement();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -50,13 +51,19 @@ public class ProductServlet extends HttpServlet {
 			String id = request.getParameter("id");
 			if (id != null) {
 
-				request.setAttribute("map", getData(id));
-				request.setAttribute("attribMap", getAttribReviews(id));
+				try {
+					request.setAttribute("map", getData(id));
+					request.setAttribute("attribMap", getAttribReviews(id));
 
-				request.setAttribute("positive_reviews", getPositiveReviews(id)
-						.subList(0, 3));
-				request.setAttribute("negative_reviews", getNegativeReviews(id)
-						.subList(0, 3));
+					request.setAttribute("positive_reviews",
+							getPositiveReviews(id).subList(0, 3));
+					request.setAttribute("negative_reviews",
+							getNegativeReviews(id).subList(0, 3));
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			} else {
 				HashMap<String, Integer> map = new HashMap<String, Integer>();
 				map.put("positive", 200);
@@ -87,7 +94,8 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	public HashMap<String, Integer> getData(String id)
-			throws ClassNotFoundException, SQLException {
+			throws ClassNotFoundException, SQLException,
+			InstantiationException, IllegalAccessException {
 		String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' group by x;";
 		getConnection();
@@ -99,7 +107,8 @@ public class ProductServlet extends HttpServlet {
 		return map;
 	}
 
-	public ArrayList<String> getPositiveReviews(String id) throws SQLException {
+	public ArrayList<String> getPositiveReviews(String id) throws SQLException,
+			InstantiationException, IllegalAccessException {
 		getConnection();
 		String query = reviews + " where positivity>" + 0 + "and retailer_id='"
 				+ id + "'";
@@ -114,7 +123,8 @@ public class ProductServlet extends HttpServlet {
 		return arr;
 	}
 
-	public ArrayList<String> getNegativeReviews(String id) throws SQLException {
+	public ArrayList<String> getNegativeReviews(String id) throws SQLException,
+			InstantiationException, IllegalAccessException {
 		getConnection();
 		String query = reviews + " where positivity<" + 0
 				+ " and retailer_id = '" + id + "'";
@@ -130,7 +140,7 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	public HashMap<String, Float> getAttribReviews(String id)
-			throws SQLException {
+			throws SQLException, InstantiationException, IllegalAccessException {
 		HashMap<String, Float> map = new HashMap<String, Float>();
 		getConnection();
 		String query = attrib_reviews + " where retailer_id='" + id + "'";
