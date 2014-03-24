@@ -35,6 +35,7 @@ public class HelloServlet extends HttpServlet {
 			connect = DriverManager
 					.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
 							+ "user=b174f8f64c67e5&" + "password=d2a1f516");
+			statement = connect.createStatement();
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
