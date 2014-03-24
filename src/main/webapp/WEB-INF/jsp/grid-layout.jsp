@@ -63,8 +63,18 @@
 					<li class="list-group-item">
 					<div class="row">
 						<a href="/product?id=${entry.id}">
+						 <c:choose>
+						<c:when test='${(val.count)%2 eq 0}'>
 							<div class="span2"><img src ="${entry.img_url }" class="img-responsive img-thumbnail"/></div>
 							<div class="span8"><h3>${entry.title}</h3></div>
+							</c:when>
+							 <c:otherwise>
+							<div class="span2"><img src ="${entry.img_url }" class="img-responsive img-thumbnail"/></div>
+							<div class="span8"><h3>${entry.title}</h3></div>
+							
+							</c:otherwise>
+							</c:choose>
+							
 						</a>
 					</div>
 					</li>

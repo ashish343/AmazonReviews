@@ -69,7 +69,7 @@ public class GridLayoutServlet extends HttpServlet {
 			InstantiationException, IllegalAccessException {
 
 		getConnection();
-		String query = "Select title , retailer_id, img_url from product_details ";
+		String query = "Select title , retailer_id, img_url from product_details where source_id='walmart'";
 		resultSet = statement.executeQuery(query);
 		System.out.println(query);
 		String title = null;
