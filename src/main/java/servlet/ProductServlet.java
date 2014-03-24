@@ -32,13 +32,12 @@ public class ProductServlet extends HttpServlet {
 			IllegalAccessException {
 		try {
 
-			if (connect == null || connect.isClosed()) {
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				connect = DriverManager
-						.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
-								+ "user=b174f8f64c67e5&" + "password=d2a1f516");
-				statement = connect.createStatement();
-			}
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			connect = DriverManager
+					.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
+							+ "user=b174f8f64c67e5&" + "password=d2a1f516");
+			statement = connect.createStatement();
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -60,7 +59,10 @@ public class ProductServlet extends HttpServlet {
 
 			request.setAttribute("positive_reviews", getPositiveReviews(id));
 			request.setAttribute("negative_reviews", getNegativeReviews(id));
-			request.setAttribute("product_name", getName(id));
+			String[] arr = getNameAndImageUrl(id);
+			request.setAttribute("product_name", arr[0]);
+			request.setAttribute("product_img", arr[1]);
+
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -148,19 +150,21 @@ public class ProductServlet extends HttpServlet {
 		return map;
 	}
 
-	public String getName(String id) throws SQLException,
+	public String[] getNameAndImageUrl(String id) throws SQLException,
 			InstantiationException, IllegalAccessException {
 
 		getConnection();
-		String query = "Select title from product_details where retailer_id='"
+		String query = "Select title , img_url from product_details where retailer_id='"
 				+ id + "'";
 		resultSet = statement.executeQuery(query);
 		String title = null;
+		String img = null;
 		while (resultSet.next()) {
 			title = resultSet.getString("title");
+			img = resultSet.getString("img_url");
 		}
 
-		return title;
+		return new String[] { title, img };
 	}
 
 }

@@ -85,8 +85,10 @@ vertical-align: top;}
 	<body>
 		<div class="container">
 			<header class="clearfix">
-				
-				<h1>${product_name}</h1>
+				<div class="row">
+					<div class="span2"><img src='${product_img}' class="img-reponsive img-thumbnail" /></div>
+					<div class="span8"><h1>${product_name}</h1></div>
+				</div>				
 							</header>
 			<ul class="cbp-vimenu">
 				<li><a href="/	" class="icon-logo">Logo</a></li>
