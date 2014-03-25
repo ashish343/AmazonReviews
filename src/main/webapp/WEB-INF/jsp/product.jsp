@@ -175,10 +175,7 @@ vertical-align: top;}
 		
     <div class="row"  style="padding: 10px">
       <div class="span2" ><img src="http://placehold.it/180x120"></div>
-      <div class="span8" >asdasdasd as kjahs dkajlkajshadl ksjdhakl sjdhakl sskdksdhals k
-      a s;lkdjas ;lkdjas;lkdj as;lkdja ;lskdjal;skjdal;skjdal;ksj da;lksjda;lksj d;alsdj a
-       alskjda;sldkjas;lkdja;lskdja;lsk dja;lskdja ;lskdja ;slkdjas;dljka s
-        al;skdja;sldkja ;slkdja ;lskdja;slkjda;ls dkjas
+      <div class="span8" >Lorem Ipsum, Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
         </div>
     	</div>
     	

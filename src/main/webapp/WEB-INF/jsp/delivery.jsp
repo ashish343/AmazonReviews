@@ -34,9 +34,14 @@
 		.row{
 		padding:5px;
 		}</style>
-		<script>	
+		
 
 		
+	
+	</head>
+	<body>
+	
+	<script>	
 		  
 		
 		$(function () {
@@ -82,12 +87,6 @@
 		
 		
 		</script>
-
-		
-	
-	</head>
-	<body>
-	
 		<div class="container">
 			<header class="clearfix">
 				
