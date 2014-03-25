@@ -77,7 +77,8 @@ vertical-align: top;}
 		            ]
 		        }]
 		    });
-		});</script>
+		});
+		</script>
 
 		
 	
