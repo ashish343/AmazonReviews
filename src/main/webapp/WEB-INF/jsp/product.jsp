@@ -3,6 +3,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Arrays"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html lang="en" class="no-js">
 	<head>
@@ -144,14 +145,17 @@ vertical-align: top;}
 		<table class="table table-striped table-bordered table-condensed">
 		
 		<c:forEach items="${attribMap}" var="entry" varStatus="val">
-		<tr >
+		 <c:if test="${entry.value>0}"> 
+			<tr >
 			<td width="50%">${entry.key}</td>
 			<td ><div class="progress">
-  	<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ${entry.value*100}%;">
-    <span class="sr-only">60% Complete</span>
-  </div>
-</div></td>
-		</tr>
+		  		<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ${entry.value*100}%;">
+		    	<span class="sr-only">60% Complete</span>
+		  		</div>
+				</div>
+			</td>
+			</tr>
+		</c:if>
 		</c:forEach>
 		</table>
 		
@@ -184,33 +188,41 @@ vertical-align: top;}
 				</c:forEach>
 					
 				</table>
-				</div>	
+				</div>
+				<c:if test="${fn:length(negative_reviews) > 1 }">
+					
 				<div>
+				
 				<h2>Negative Reviews</h2>
-				<table width="100%">
-					<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
-						<tr><td>
-						<div class="panel-group" id="accordion">
+				<table border ="0" width="100%">
+				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+				 
+				 <tr><td style="padding: 3px" class="even">
+		 		<div class="panel-group" id="accordion">
 			  	<div class="panel panel-default">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
-			          Summary ${val.count}
+			          ${entry.display_text }
 			        </a>
 			      </h4>
 			    </div>
 			    <div id="collapse${val.count}" class="panel-collapse collapse ">
 			      <div class="panel-body">
-			        	${entry}
+			        	${entry.review}
 			      </div>
 			    </div>
 			  </div>
-			  </div>	
-						
-	               		</td></tr>
-					</c:forEach>
+			  </div>						
+					
+               		</td></tr>
+				 
+					
+				</c:forEach>
+					
 				</table>
 				</div>
+				</c:if>
 				
 			<!-- Product Page -->	
 				

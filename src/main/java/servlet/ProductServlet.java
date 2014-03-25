@@ -113,7 +113,7 @@ public class ProductServlet extends HttpServlet {
 			throws SQLException, InstantiationException, IllegalAccessException {
 		String query = reviews + " where positivity>" + 0
 				+ " and retailer_id='" + id
-				+ "' order by positivity desc limit 10";
+				+ "' and review_title!='' order by positivity desc limit 10";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
 		ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
@@ -131,17 +131,23 @@ public class ProductServlet extends HttpServlet {
 		return arr;
 	}
 
-	public ArrayList<String> getNegativeReviews(String id) throws SQLException,
-			InstantiationException, IllegalAccessException {
+	public ArrayList<HashMap<String, String>> getNegativeReviews(String id)
+			throws SQLException, InstantiationException, IllegalAccessException {
 		String query = reviews + " where positivity<" + 0
-				+ " and retailer_id = '" + id + "'";
+				+ " and retailer_id='" + id
+				+ "' and review_title!='' order by positivity desc limit 10";
+		System.out.println(query);
 		resultSet = statement.executeQuery(query);
-		ArrayList<String> arr = new ArrayList<String>();
+		ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
+
 		while (resultSet.next()) {
+			HashMap<String, String> map = new HashMap<String, String>();
 			String text = resultSet.getString("review");
 			text = text.replace("\'", "");
 			text = text.replace("\"", "");
-			arr.add(text);
+			map.put("review", text);
+			map.put("display_text", resultSet.getString("review_title"));
+			arr.add(map);
 		}
 
 		return arr;
