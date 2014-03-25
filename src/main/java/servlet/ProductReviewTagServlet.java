@@ -56,6 +56,7 @@ public class ProductReviewTagServlet extends HttpServlet {
 			if (tag == null) {
 				response.sendRedirect("/product?id=" + id);
 			} else {
+				request.setAttribute("map", getData(id, tag));
 				ArrayList<Map<String, String>> neg = getProductReviews(id, tag);
 				request.setAttribute("negative_reviews", neg);
 				request.setAttribute("tag", tag);
@@ -70,10 +71,30 @@ public class ProductReviewTagServlet extends HttpServlet {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		request.getRequestDispatcher("/WEB-INF/jsp/findProductReviews.jsp")
 				.forward(request, response);
+	}
+
+	public HashMap<String, Integer> getData(String id, String tag)
+			throws ClassNotFoundException, SQLException,
+			InstantiationException, IllegalAccessException {
+		String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews where retailer_id='"
+				+ id + "' and tags like '%" + tag + "%' group by x;";
+		System.out.println(posNegReviewCount);
+		resultSet = statement.executeQuery(posNegReviewCount);
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("positive", 0);
+		map.put("negative", 0);
+		while (resultSet.next()) {
+			map.put(resultSet.getString("x"), resultSet.getInt("count"));
+		}
+
+		return map;
 	}
 
 	public HashMap<String, Integer> getData() throws ClassNotFoundException,

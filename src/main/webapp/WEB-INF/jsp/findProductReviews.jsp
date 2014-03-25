@@ -40,6 +40,48 @@
 	
 	</head>
 	<body>
+	<script>
+		
+		$(function () {
+		    $('#container').highcharts({
+		        chart: {
+		            plotBackgroundColor: null,
+		            plotBorderWidth: null,
+		            plotShadow: false
+		        },
+		        title: {
+		            text: 'Sentiment Review Meter'
+		        },
+		        tooltip: {
+		    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		        },
+		        plotOptions: {
+		            pie: {
+		                allowPointSelect: true,
+		                cursor: 'pointer',
+		                dataLabels: {
+		                    enabled: true,
+		                    color: '#000000',
+		                    connectorColor: '#000000',
+		                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+		                }
+		            }
+		        },
+		        series: [{
+		            type: 'pie',
+		            name: 'Review Share',
+		            data: [
+		                ['Positive',  ${map.positive}],		                
+		                {
+		                    name: 'Negative',
+		                    y: ${map.negative},
+		                    sliced: true,
+		                    selected: true
+		                }
+		            ]
+		        }]
+		    });});
+	    </script>
 		<div class="container">
 			<header class="clearfix">
 				
@@ -49,8 +91,8 @@
 			
 			<div class="main">
 				
-				<span><h2>Product Reviews for <span style="color:black;font-weight:bold">${id}</span> with <span style="color:black;font-weight:bold">${tag}</span></h2></span>
-				
+				<span><h2>Product Reviews for <a href="/product?id=${id} "><span style="color:black;font-weight:bold">${id}</span></a> with <span style="color:black;font-weight:bold">${tag}</span></h2></span>
+				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
 				<div class="row" style="display: block">
 				<div class="panel-group" id="accordion">

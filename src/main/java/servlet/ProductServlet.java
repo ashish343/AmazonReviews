@@ -113,7 +113,7 @@ public class ProductServlet extends HttpServlet {
 			throws SQLException, InstantiationException, IllegalAccessException {
 		String query = reviews + " where positivity>" + 0
 				+ " and retailer_id='" + id
-				+ "' and review_title!='' order by positivity desc limit 10";
+				+ "'  order by positivity desc limit 10";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
 		ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
@@ -124,7 +124,11 @@ public class ProductServlet extends HttpServlet {
 			text = text.replace("\'", "");
 			text = text.replace("\"", "");
 			map.put("review", text);
-			map.put("display_text", resultSet.getString("review_title"));
+			String review_title = resultSet.getString("review_title");
+			if (review_title == null)
+				review_title = text.substring(0, Math.min(150, text.length()));
+
+			map.put("display_text", review_title);
 			arr.add(map);
 		}
 
