@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="Website-SpringMVC" basedir="." default="usage">
+
     <property name="src.dir" value="src/main/java"/>
     <property name="web.dir" value="src/main/webapp"/>
     <property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
