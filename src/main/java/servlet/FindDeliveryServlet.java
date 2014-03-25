@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "DeliveryServlet", urlPatterns = { "/delivery" })
-public class DeliveryServlet extends HttpServlet {
+@WebServlet(name = "FindDeliveryServlet", urlPatterns = { "/findDeliveryTag" })
+public class FindDeliveryServlet extends HttpServlet {
 
 	private static Connection connect = null;
 	private static Statement statement = null;
@@ -50,17 +50,19 @@ public class DeliveryServlet extends HttpServlet {
 
 		try {
 			getConnection();
+			String tag = request.getParameter("tag");
+			if (tag == null) {
+				response.sendRedirect("/delivery");
+			} else {
+				Object[] arr = getDeliveryReviews(tag);
+				ArrayList<Map<String, String>> pos = (ArrayList<Map<String, String>>) arr[0];
+				ArrayList<Map<String, String>> neg = (ArrayList<Map<String, String>>) arr[1];
 
-			Object[] arr = getDeliveryReviews();
-			ArrayList<Map<String, String>> pos = (ArrayList<Map<String, String>>) arr[0];
-			ArrayList<Map<String, String>> neg = (ArrayList<Map<String, String>>) arr[1];
+				request.setAttribute("positive_reviews", pos);
+				request.setAttribute("negative_reviews", neg);
+				request.setAttribute("tag", tag);
 
-			request.setAttribute("positive_reviews", pos);
-			request.setAttribute("negative_reviews", neg);
-			ArrayList<HashMap<String, String>> arr1 = tokenCountDeliveryReviews();
-			String str = arr1.toString();
-			str = str.replace("=", ":");
-			request.setAttribute("token_count", str);
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,7 +74,7 @@ public class DeliveryServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		request.getRequestDispatcher("/WEB-INF/jsp/delivery.jsp").forward(
+		request.getRequestDispatcher("/WEB-INF/jsp/findDelivery.jsp").forward(
 				request, response);
 	}
 
@@ -156,9 +158,10 @@ public class DeliveryServlet extends HttpServlet {
 		return list;
 	}
 
-	public Object[] getDeliveryReviews() throws SQLException,
+	public Object[] getDeliveryReviews(String tag) throws SQLException,
 			InstantiationException, IllegalAccessException {
-		String query = "select * from review_classification where display_text!='' order by polarity desc";
+		String query = "select * from review_classification where display_text!='' and reason like '%"
+				+ tag + "%' order by polarity desc";
 		resultSet = statement.executeQuery(query);
 		Object arr[] = new Object[2];
 		ArrayList<Map<String, String>> positiveReviews = new ArrayList<Map<String, String>>();

@@ -28,11 +28,16 @@
 		<link href="/resources/css/component.css" rel="stylesheet">
 		<link type="text/css" href="${path}/resources/css/bootstrap.min.css" rel="stylesheet"/>
 		<link type="text/css" href="${path}/resources/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+		<script src="/resources/js/d3/lib/d3/d3.js"></script>
+		<script src="/resources/js/d3/d3.layout.cloud.js"></script>
 		<style>
 		.row{
 		padding:5px;
 		}</style>
 		
+
+		
+	
 	</head>
 	<body>
 		<div class="container">
@@ -41,31 +46,32 @@
 				<h1>Walmart Review Monitor</h1>
 							</header>
 			<%@ include file="/WEB-INF/jsp/menu.jsp" %>
+			
 			<div class="main">
 				
-				<h2>Products Wall</h2>
-				<ul class="list-group">
-  
-
-				<c:forEach items="${itemMap}" var="entry" varStatus="val">
-					
-					<li class="list-group-item">
-					<div class="row">
-						<a href="/product?id=${entry.id}">
-						
-							<div class="span2"><img src ="${entry.img_url }" class="img-responsive img-thumbnail"/></div>
-							
-								<div class="span8">								
-								<div><h3>${entry.title}</h3></div>
-								  	
-								</div>
-						</a>
-					</div>
-					</li>
+				<span><h2>Delivery Issues for <span style="color:black;font-weight:bold">${tag}</span></h2></span>
+				
+				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+				<div class="row" style="display: block">
+				<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			          ${entry.display_text}
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapse${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry.review}
+			      </div>
+			    </div>
+			  </div>
+			  </div>
+			  </div>	
 				</c:forEach>
-				</ul>
-				
-				
+								
     	</div>									
 	</div>			
 			

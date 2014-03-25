@@ -73,11 +73,15 @@
 				        .style("font-size", function(d) { return d.size + "px"; })
 				        .style("font-family", "Impact")
 				        .style("fill", function(d, i) { return fill(i); })
+				        .style("cursor","pointer" )
 				        .attr("text-anchor", "middle")
 				        .attr("transform", function(d) {
 				          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				        })
-				        .text(function(d) { return d.text; });
+				        .text(function(d) { return d.text; })
+				        .on("click", function(d){
+				        	window.location.href = "/findDeliveryTag?tag="+d.text;        
+					        });
 			  }
 			  $("#btn").click(function(){
 					window.location.href = "/grid";
