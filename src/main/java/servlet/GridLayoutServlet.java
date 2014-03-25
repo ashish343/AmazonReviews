@@ -70,7 +70,7 @@ public class GridLayoutServlet extends HttpServlet {
 	public ArrayList<Map<String, String>> getItems() throws SQLException,
 			InstantiationException, IllegalAccessException {
 
-		String query = "Select title , a.retailer_id, img_url from product_details a where a.source_id='walmart';";
+		String query = "Select title , a.retailer_id, img_url , b.score from product_details a, product_attribute_stats b  where a.source_id='walmart' and a.retailer_id=b.retailer_id and b.attribute='*' and b.scoring_method='count' order by b.score desc;";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
 

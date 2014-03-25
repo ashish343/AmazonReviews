@@ -35,6 +35,8 @@ vertical-align: top;}
 		<link href="/resources/css/component.css" rel="stylesheet">
 		<link type="text/css" href="${path}/resources/css/bootstrap.min.css" rel="stylesheet"/>
 		<link type="text/css" href="${path}/resources/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+		<script src="/resources/js/d3/lib/d3/d3.js"></script>
+		<script src="/resources/js/d3/d3.layout.cloud.js"></script>
 		
 		<script>
 		
@@ -77,6 +79,47 @@ vertical-align: top;}
 		            ]
 		        }]
 		    });
+
+		    var fill = d3.scale.category20();
+		    var data = ${tag_cloud}
+		    
+		    
+			  d3.layout.cloud().size([960, 600])
+			      .words(data.map(function(d) {
+			        return {text: d.text, size: d.frequency *5 +30 };
+			      }))
+			      .padding(5)
+			      .rotate(function() { return ~~(Math.random() * 2) * 90; })
+			      .font("Impact")
+			      .fontSize(function(d) { return d.size; })
+			      .on("end", draw)
+			      .start();
+		      
+			  function draw(words) {
+				    d3.select("#wordcloud").append("svg")
+				        .attr("width", 960)
+				        .attr("height", 600)
+				      .append("g")
+				        .attr("transform", "translate(480,300)")
+				      .selectAll("text")
+				        .data(words)
+				      .enter().append("text")
+				        .style("font-size", function(d) { return d.size + "px"; })
+				        .style("font-family", "Impact")
+				        .style("fill", function(d, i) { return fill(i); })
+				        .style("cursor","pointer" )
+				        .attr("text-anchor", "middle")
+				        .attr("transform", function(d) {
+				          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+				        })
+				        .text(function(d) { return d.text; })
+				        .on("click", function(d){
+				        	window.location.href = "/productReviews?id=${id}&tag="+d.text;        
+					        });
+			  }
+			  $("#btn").click(function(){
+					window.location.href = "/productReviews?id="+${id}+"&tag="+d.text;
+					});
 		});
 		</script>
 
@@ -95,6 +138,7 @@ vertical-align: top;}
 			<div class="main">
 				<h2>Sentiment Review Monitor</h2>
 				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+				<div id='wordcloud'></div>
 				
 				<h2>Attribute Review Score</h2>
 		<table class="table table-striped table-bordered table-condensed">
