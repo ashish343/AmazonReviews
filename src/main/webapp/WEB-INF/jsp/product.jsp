@@ -202,12 +202,12 @@ vertical-align: top;}
 			  	<div class="panel panel-default">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseneg${val.count}">
 			          ${entry.display_text }
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapse${val.count}" class="panel-collapse collapse ">
+			    <div id="collapseneg${val.count}" class="panel-collapse collapse ">
 			      <div class="panel-body">
 			        	${entry.review}
 			      </div>
