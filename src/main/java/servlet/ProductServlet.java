@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +18,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import util.ConnectUtil;
 
 import com.google.gson.Gson;
 
@@ -38,10 +39,9 @@ public class ProductServlet extends HttpServlet {
 		try {
 
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connect = DriverManager
-					.getConnection("jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_e3f1160c4f489ca?"
-							+ "user=b174f8f64c67e5&" + "password=d2a1f516");
-			statement = connect.createStatement();
+			Object[] arr = ConnectUtil.connect(connect, statement);
+			connect = (Connection) arr[0];
+			statement = (Statement) arr[1];
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
