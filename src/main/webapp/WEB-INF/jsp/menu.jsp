@@ -1,5 +1,5 @@
 <ul class="cbp-vimenu">
-				<li><a href="#" class="icon-logo">Logo</a></li>
+				<li><a href="/" class="icon-logo">Logo</a></li>
 				<li><a href="/grid" class="icon-images">Images</a></li>
 				<li><a href="/product" class="icon-search">Search</a></li>				
 				<li><a href="#" class="icon-pencil">Pencil</a></li>
