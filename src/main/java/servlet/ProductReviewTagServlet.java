@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.ConnectUtil;
+import util.ProjectConstants;
 
 @WebServlet(name = "ProductReviewTagServlet", urlPatterns = { "/productReviews" })
 public class ProductReviewTagServlet extends HttpServlet {
@@ -83,13 +84,18 @@ public class ProductReviewTagServlet extends HttpServlet {
 	public HashMap<String, Integer> getData(String id, String tag)
 			throws ClassNotFoundException, SQLException,
 			InstantiationException, IllegalAccessException {
-		String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews where retailer_id='"
+		String posNegReviewCount = "select if(positivity>"
+				+ ProjectConstants.k2
+				+ ", 'positive',if(positivity<"
+				+ ProjectConstants.k1
+				+ ", 'negative', 'neutral')) x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' and tags like '%" + tag + "%' group by x;";
 		System.out.println(posNegReviewCount);
 		resultSet = statement.executeQuery(posNegReviewCount);
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("positive", 0);
 		map.put("negative", 0);
+		map.put("neutral", 0);
 		while (resultSet.next()) {
 			map.put(resultSet.getString("x"), resultSet.getInt("count"));
 		}

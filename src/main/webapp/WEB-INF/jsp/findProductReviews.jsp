@@ -71,7 +71,8 @@
 		            type: 'pie',
 		            name: 'Review Share',
 		            data: [
-		                ['Positive',  ${map.positive}],		                
+		                 ['Positive',  ${map.positive}],
+		                ['Neutral',  ${map.neutral}],		                
 		                {
 		                    name: 'Negative',
 		                    y: ${map.negative},

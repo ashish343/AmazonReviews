@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.ConnectUtil;
+import util.ProjectConstants;
 
 import com.google.gson.Gson;
 
@@ -95,7 +96,11 @@ public class ProductServlet extends HttpServlet {
 	public HashMap<String, Integer> getData(String id)
 			throws ClassNotFoundException, SQLException,
 			InstantiationException, IllegalAccessException {
-		String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews where retailer_id='"
+		String posNegReviewCount = "select if(positivity>"
+				+ ProjectConstants.k2
+				+ ", 'positive',if(positivity<"
+				+ ProjectConstants.k1
+				+ ", 'negative', 'neutral')) x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' group by x;";
 		System.out.println(posNegReviewCount);
 		resultSet = statement.executeQuery(posNegReviewCount);
@@ -111,7 +116,7 @@ public class ProductServlet extends HttpServlet {
 
 	public ArrayList<HashMap<String, String>> getPositiveReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		String query = reviews + " where positivity>" + 0
+		String query = reviews + " where positivity>" + ProjectConstants.k2
 				+ " and retailer_id='" + id
 				+ "'  order by positivity desc limit 10";
 		System.out.println(query);
@@ -137,7 +142,7 @@ public class ProductServlet extends HttpServlet {
 
 	public ArrayList<HashMap<String, String>> getNegativeReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		String query = reviews + " where positivity<" + 0
+		String query = reviews + " where positivity<" + ProjectConstants.k1
 				+ " and retailer_id='" + id
 				+ "' and review_title!='' order by positivity desc limit 10";
 		System.out.println(query);
