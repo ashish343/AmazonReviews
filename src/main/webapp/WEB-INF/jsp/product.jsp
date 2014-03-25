@@ -90,18 +90,7 @@ vertical-align: top;}
 					<div class="span8"><h1>${product_name}</h1></div>
 				</div>				
 							</header>
-			<ul class="cbp-vimenu">
-				<li><a href="/	" class="icon-logo">Logo</a></li>
-				
-				<li><a href="#" class="icon-search">Search</a></li>
-				<li><a href="#" class="icon-pencil">Pencil</a></li>
-				<!-- Example for active item:
-				<li class="cbp-vicurrent"><a href="#" class="icon-pencil">Pencil</a></li>
-				-->
-				<li><a href="#" class="icon-location">Location</a></li>
-				<li><a href="#" class="icon-images">Images</a></li>
-				<li><a href="#" class="icon-download">Download</a></li>
-			</ul>
+			<%@ include file="/WEB-INF/jsp/menu.jsp" %>
 			<div class="main">
 				<h2>Sentiment Review Monitor</h2>
 				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

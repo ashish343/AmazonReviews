@@ -54,6 +54,7 @@ public class ProductServlet extends HttpServlet {
 			id = "B002NEGTTW";
 
 		try {
+			getConnection();
 			request.setAttribute("map", getData(id));
 			request.setAttribute("attribMap", getAttribReviews(id));
 
@@ -62,6 +63,7 @@ public class ProductServlet extends HttpServlet {
 			String[] arr = getNameAndImageUrl(id);
 			request.setAttribute("product_name", arr[0]);
 			request.setAttribute("product_img", arr[1]);
+			connect.close();
 
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -77,6 +79,7 @@ public class ProductServlet extends HttpServlet {
 
 		request.getRequestDispatcher("/WEB-INF/jsp/product.jsp").forward(
 				request, response);
+
 	}
 
 	public HashMap<String, Integer> getData(String id)
@@ -85,7 +88,6 @@ public class ProductServlet extends HttpServlet {
 		String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' group by x;";
 		System.out.println(posNegReviewCount);
-		getConnection();
 		resultSet = statement.executeQuery(posNegReviewCount);
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("positive", 0);
@@ -93,12 +95,12 @@ public class ProductServlet extends HttpServlet {
 		while (resultSet.next()) {
 			map.put(resultSet.getString("x"), resultSet.getInt("count"));
 		}
+
 		return map;
 	}
 
 	public ArrayList<HashMap<String, String>> getPositiveReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		getConnection();
 		String query = reviews + " where positivity>" + 0
 				+ " and retailer_id='" + id
 				+ "' order by positivity desc limit 10";
@@ -115,12 +117,12 @@ public class ProductServlet extends HttpServlet {
 			map.put("display_text", resultSet.getString("review_title"));
 			arr.add(map);
 		}
+
 		return arr;
 	}
 
 	public ArrayList<String> getNegativeReviews(String id) throws SQLException,
 			InstantiationException, IllegalAccessException {
-		getConnection();
 		String query = reviews + " where positivity<" + 0
 				+ " and retailer_id = '" + id + "'";
 		resultSet = statement.executeQuery(query);
@@ -131,13 +133,13 @@ public class ProductServlet extends HttpServlet {
 			text = text.replace("\"", "");
 			arr.add(text);
 		}
+
 		return arr;
 	}
 
 	public TreeMap<String, Float> getAttribReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
 		TreeMap<String, Float> map = new TreeMap<String, Float>();
-		getConnection();
 		String query = attrib_reviews + " where retailer_id='" + id + "'";
 		resultSet = statement.executeQuery(query);
 		while (resultSet.next()) {
@@ -147,13 +149,13 @@ public class ProductServlet extends HttpServlet {
 			}
 			map.put(text, resultSet.getFloat("score"));
 		}
+
 		return map;
 	}
 
 	public String[] getNameAndImageUrl(String id) throws SQLException,
 			InstantiationException, IllegalAccessException {
 
-		getConnection();
 		String query = "Select title , img_url from product_details where retailer_id='"
 				+ id + "'";
 		resultSet = statement.executeQuery(query);

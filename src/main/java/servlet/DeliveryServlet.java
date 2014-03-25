@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "MyServlet", urlPatterns = { "/hello" })
-public class HelloServlet extends HttpServlet {
+@WebServlet(name = "DeliveryServlet", urlPatterns = { "/delivery" })
+public class DeliveryServlet extends HttpServlet {
 
 	private static Connection connect = null;
 	private static Statement statement = null;
@@ -49,18 +49,11 @@ public class HelloServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		try {
-			HashMap<String, Integer> map = getData();
-
+			getConnection();
 			Object[] arr = getDeliveryReviews();
 			ArrayList<Map<String, String>> pos = (ArrayList<Map<String, String>>) arr[0];
 			ArrayList<Map<String, String>> neg = (ArrayList<Map<String, String>>) arr[1];
-			System.out.println(map.keySet());
-			// handler to avoid empty data
-			if (map.keySet().size() == 0) {
-				map.put("positive", 200);
-				map.put("negative", 200);
-			}
-			request.setAttribute("map", map);
+
 			request.setAttribute("positive_reviews", pos);
 			request.setAttribute("negative_reviews", neg);
 			ArrayList<HashMap<String, String>> arr1 = tokenCountDeliveryReviews();
@@ -68,8 +61,6 @@ public class HelloServlet extends HttpServlet {
 			str = str.replace("=", ":");
 			request.setAttribute("token_count", str);
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
@@ -80,7 +71,7 @@ public class HelloServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		request.getRequestDispatcher("/WEB-INF/jsp/welcome.jsp").forward(
+		request.getRequestDispatcher("/WEB-INF/jsp/delivery.jsp").forward(
 				request, response);
 	}
 

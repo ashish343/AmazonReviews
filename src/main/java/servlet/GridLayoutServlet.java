@@ -51,7 +51,9 @@ public class GridLayoutServlet extends HttpServlet {
 			id = "B002NEGTTW";
 
 		try {
+			getConnection();
 			request.setAttribute("itemMap", getItems());
+			connect.close();
 
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -68,7 +70,6 @@ public class GridLayoutServlet extends HttpServlet {
 	public ArrayList<Map<String, String>> getItems() throws SQLException,
 			InstantiationException, IllegalAccessException {
 
-		getConnection();
 		String query = "Select title , retailer_id, img_url from product_details where source_id='walmart'";
 		resultSet = statement.executeQuery(query);
 		System.out.println(query);
@@ -83,6 +84,8 @@ public class GridLayoutServlet extends HttpServlet {
 			map.put("id", resultSet.getString("retailer_id"));
 			products.add(map);
 		}
+		resultSet.close();
+		connect.close();
 		return products;
 	}
 

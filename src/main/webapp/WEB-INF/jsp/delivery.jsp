@@ -40,44 +40,7 @@
 		  
 		
 		$(function () {
-		    $('#container').highcharts({
-		        chart: {
-		            plotBackgroundColor: null,
-		            plotBorderWidth: null,
-		            plotShadow: false
-		        },
-		        title: {
-		            text: 'Reviews Sentiment Meter'
-		        },
-		        tooltip: {
-		    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-		        },
-		        plotOptions: {
-		            pie: {
-		                allowPointSelect: true,
-		                cursor: 'pointer',
-		                dataLabels: {
-		                    enabled: true,
-		                    color: '#000000',
-		                    connectorColor: '#000000',
-		                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-		                }
-		            }
-		        },
-		        series: [{
-		            type: 'pie',
-		            name: 'Review Share',
-		            data: [
-		                ['Positive',  ${map.positive}],		                
-		                {
-		                    name: 'Negative',
-		                    y: ${map.negative},
-		                    sliced: true,
-		                    selected: true
-		                }
-		            ]
-		        }]
-		    });
+		    
 		    var fill = d3.scale.category20();
 		    var data = ${token_count}
 		    
@@ -112,7 +75,7 @@
 				        .text(function(d) { return d.text; });
 			  }
 			  $("#btn").click(function(){
-					window.location.href = "/delivery";
+					window.location.href = "/grid";
 					});
 			  
 		});
@@ -131,19 +94,15 @@
 				<h1>Walmart Review Monitor</h1>
 							</header>
 			<%@ include file="/WEB-INF/jsp/menu.jsp" %>
+			
 			<div class="main">
 				
-				<h2>General Review Sentiment Monitor</h2>
-				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-				
-				
-				
-				<span><h2>Delivery Issues</h2><button id="btn" type="button" class="btn btn-success">More</button></span>
+				<span><h2>Delivery Issues</h2></span>
 					
 				<div id='wordcloud' align="center" ></div>
 				
 				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
-				<div class="row" style="display: none">
+				<div class="row" style="display: block">
 				<div class="panel-group" id="accordion">
 			  	<div class="panel panel-default">
 			    <div class="panel-heading">
