@@ -225,17 +225,6 @@ vertical-align: top;}
 				</c:if>
 				
 			<!-- Product Page -->	
-				
-				
-			
-		<h2>Delivery Issues</h2>
-		
-    <div class="row"  style="padding: 10px">
-      <div class="span2" ><img src="http://placehold.it/180x120"></div>
-      <div class="span8" >Lorem Ipsum, Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum
-        </div>
-    	</div>
-    	
 		
 		
     	</div>									
