@@ -14,6 +14,12 @@
 }
 td{
 vertical-align: top;}
+.styling{
+	display:block;
+	float:left;
+	margin:2px;
+	padding: 5px;
+}
 	</style>		
 		<meta charset="UTF-8" />
 		
@@ -175,7 +181,7 @@ vertical-align: top;}
 			          <div class="row">
 			          <div class="span7">${entry.display_text }</div>
 			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
-			          	<span class="label label-warning" >${entry1}</span> 
+			          <a href='/productReviews?id=${id}&tag=${entry1}'>	<div class="label label-warning styling" >${entry1}</div></a> 
 			          </c:forEach></div>
 			          </div>
 			        </a>
@@ -212,11 +218,11 @@ vertical-align: top;}
 			  	<div class="panel panel-default">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseneg${val.count}">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapsenen${val.count}">
 			          <div class="row">
 			          <div class="span7">${entry.display_text }</div>
 			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
-			          	<span class="label label-warning">${entry1}</span>
+			          	<a href='/productReviews?id=${id}&tag=${entry1}'><div class="label label-warning styling">${entry1}</div></a>
 			          </c:forEach></div>
 			          </div>
 			          
@@ -224,7 +230,7 @@ vertical-align: top;}
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapseneg${val.count}" class="panel-collapse collapse ">
+			    <div id="collapsenen${val.count}" class="panel-collapse collapse ">
 			      <div class="panel-body">
 			        	${entry.review}
 			      </div>
@@ -258,7 +264,7 @@ vertical-align: top;}
 			          <div class="row">
 			          <div class="span7">${entry.display_text }</div>
 			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
-			          	<span class="label label-warning">${entry1}</span>
+			          	<a href='/productReviews?id=${id}&tag=${entry1}'><span class="label label-warning styling">${entry1}</span></a>
 			          </c:forEach></div>
 			          </div>
 			          
