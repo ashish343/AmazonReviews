@@ -3,6 +3,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Arrays"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html lang="en" class="no-js">
 	<head>
@@ -40,6 +41,47 @@
 	
 	</head>
 	<body>
+	
+	
+	<script>
+	$(function () {
+	    $('#container').highcharts({
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false
+	        },
+	        title: {
+	            text: 'Reviews Sentiment Meter'
+	        },
+	        tooltip: {
+	    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: true,
+	                    color: '#000000',
+	                    connectorColor: '#000000',
+	                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+	                }
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            name: 'Review Share',
+	            data: [
+	                ['Positive',  ${map.positive}],
+	                ['Neutral',  ${map.neutral}],
+	                ['Negative',  ${map.negative}]
+
+	            ]
+	        }]
+	    });
+	});
+	    </script>
 		<div class="container">
 			<header class="clearfix">
 				
@@ -50,19 +92,24 @@
 			<div class="main">
 				
 				<span><h2>Delivery Issues for <span style="color:black;font-weight:bold">${tag}</span></h2></span>
+				<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 				
-				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+				
+				
+				<c:if test="${fn:length(positive_reviews) > 0 }">
+				<h2>Positive Reviews</h2>
+				<c:forEach items="${positive_reviews}" var="entry" varStatus="val">
 				<div class="row" style="display: block">
 				<div class="panel-group" id="accordion">
 			  	<div class="panel panel-default">
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
-			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapsea${val.count}">
 			          ${entry.display_text}
 			        </a>
 			      </h4>
 			    </div>
-			    <div id="collapse${val.count}" class="panel-collapse collapse ">
+			    <div id="collapsea${val.count}" class="panel-collapse collapse ">
 			      <div class="panel-body">
 			        	${entry.review}
 			      </div>
@@ -71,6 +118,56 @@
 			  </div>
 			  </div>	
 				</c:forEach>
+				</c:if>
+				
+				
+				<c:if test="${fn:length(neutral_reviews) > 0 }">
+				<h2>Neutral Reviews</h2>
+				<c:forEach items="${neutral_reviews}" var="entry" varStatus="val">
+				<div class="row" style="display: block">
+				<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseb${val.count}">
+			          ${entry.display_text}
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseb${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry.review}
+			      </div>
+			    </div>
+			  </div>
+			  </div>
+			  </div>	
+				</c:forEach>
+				</c:if>
+				
+				<c:if test="${fn:length(negative_reviews) > 0 }">
+				<h2>Negative Reviews</h2>
+				<c:forEach items="${negative_reviews}" var="entry" varStatus="val">
+				<div class="row" style="display: block">
+				<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapsec${val.count}">
+			          ${entry.display_text}
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapsec${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry.review}
+			      </div>
+			    </div>
+			  </div>
+			  </div>
+			  </div>	
+				</c:forEach>
+				</c:if>
 								
     	</div>									
 	</div>			

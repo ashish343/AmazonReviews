@@ -101,7 +101,23 @@
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
-			          ${entry.display_text}
+			        <div class="row">
+			        <div class="span9">${entry.display_text}</div>
+			        <div class="span1"><c:choose>
+			          <c:when test="${entry.categ=='1'}">
+			          	<span class="label label-success">Positive</span>
+			          </c:when>
+			          <c:when test="${entry.categ=='-1'}">
+			          	<span class="label label-danger">Negative</span>
+			          </c:when>
+			          <c:otherwise>
+			          	<span class="label label-info">Neutral</span>
+			          </c:otherwise>
+			          </c:choose>
+			        </div>
+   			        </div>
+			        
+			          
 			        </a>
 			      </h4>
 			    </div>

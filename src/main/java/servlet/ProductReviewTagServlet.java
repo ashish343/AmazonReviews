@@ -100,6 +100,7 @@ public class ProductReviewTagServlet extends HttpServlet {
 			map.put(resultSet.getString("x"), resultSet.getInt("count"));
 		}
 
+		System.out.println(map);
 		return map;
 	}
 
@@ -186,21 +187,34 @@ public class ProductReviewTagServlet extends HttpServlet {
 	public ArrayList<Map<String, String>> getProductReviews(String id,
 			String tag) throws SQLException, InstantiationException,
 			IllegalAccessException {
-		String query = "select review_title, review from product_reviews where tags like '%"
+		String query = "select review_title, review , positivity from product_reviews where tags like '%"
 				+ tag + "%' and retailer_id='" + id + "'";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
-		ArrayList<Map<String, String>> negReviews = new ArrayList<Map<String, String>>();
+		ArrayList<Map<String, String>> reviews = new ArrayList<Map<String, String>>();
 		while (resultSet.next()) {
-
-			String displayText = resultSet.getString("review_title");
-			String review = resultSet.getString("review");
+			String text = resultSet.getString("review");
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("review", review);
-			map.put("display_text", displayText);
-			negReviews.add(map);
+			map.put("review", text);
+			String review_title = resultSet.getString("review_title");
+			if (review_title == null) {
+				review_title = text.substring(0, Math.min(150, text.length()));
+
+			}
+
+			map.put("display_text", review_title);
+			float pos = resultSet.getFloat("positivity");
+			if (pos < ProjectConstants.k1) {
+				map.put("categ", "-1");
+			} else if (pos > ProjectConstants.k2) {
+				map.put("categ", "1");
+			} else
+				map.put("categ", "0");
+
+			reviews.add(map);
 		}
-		return negReviews;
+
+		return reviews;
 	}
 
 }

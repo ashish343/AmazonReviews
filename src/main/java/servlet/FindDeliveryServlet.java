@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.ConnectUtil;
+import util.ProjectConstants;
 
 @WebServlet(name = "FindDeliveryServlet", urlPatterns = { "/findDeliveryTag" })
 public class FindDeliveryServlet extends HttpServlet {
@@ -55,12 +56,19 @@ public class FindDeliveryServlet extends HttpServlet {
 				response.sendRedirect("/delivery");
 			} else {
 				Object[] arr = getDeliveryReviews(tag);
+				HashMap<String, Integer> map = new HashMap<String, Integer>();
 				ArrayList<Map<String, String>> pos = (ArrayList<Map<String, String>>) arr[0];
 				ArrayList<Map<String, String>> neg = (ArrayList<Map<String, String>>) arr[1];
+				ArrayList<Map<String, String>> neu = (ArrayList<Map<String, String>>) arr[2];
 
 				request.setAttribute("positive_reviews", pos);
 				request.setAttribute("negative_reviews", neg);
+				request.setAttribute("neutral_reviews", neu);
+				map.put("neutral", neu.size());
+				map.put("positive", pos.size());
+				map.put("negative", neg.size());
 				request.setAttribute("tag", tag);
+				request.setAttribute("map", map);
 
 			}
 
@@ -163,24 +171,35 @@ public class FindDeliveryServlet extends HttpServlet {
 		String query = "select * from review_classification where display_text!='' and reason like '%"
 				+ tag + "%' order by polarity desc";
 		resultSet = statement.executeQuery(query);
-		Object arr[] = new Object[2];
+		Object arr[] = new Object[3];
 		ArrayList<Map<String, String>> positiveReviews = new ArrayList<Map<String, String>>();
+		ArrayList<Map<String, String>> neutral = new ArrayList<Map<String, String>>();
 		ArrayList<Map<String, String>> negReviews = new ArrayList<Map<String, String>>();
 		while (resultSet.next()) {
 			float polarity = resultSet.getFloat("polarity");
-			String displayText = resultSet.getString("display_text");
+
 			String review = resultSet.getString("review");
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("review", review);
-			map.put("display_text", displayText);
-			if (polarity >= -0.15)
+
+			String review_title = resultSet.getString("display_text");
+			if (review_title == null)
+				review_title = review.substring(0,
+						Math.min(150, review.length()));
+
+			map.put("display_text", review_title);
+
+			if (polarity > ProjectConstants.k2)
 				positiveReviews.add(map);
-			else
+			else if (polarity < ProjectConstants.k1)
 				negReviews.add(map);
+			else
+				neutral.add(map);
 		}
 		arr[0] = positiveReviews;
 		arr[1] = negReviews;
+		arr[2] = neutral;
+
 		return arr;
 	}
-
 }

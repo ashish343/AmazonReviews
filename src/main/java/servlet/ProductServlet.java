@@ -31,8 +31,7 @@ public class ProductServlet extends HttpServlet {
 	private static Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String posNegReviewCount = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews  group by x;";
-	private static final String reviews = "select review, review_title from product_reviews ";
+	private static final String reviews = "select tags, review, review_title from product_reviews ";
 	private static final String attrib_reviews = "select attribute, score from product_attribute_stats ";
 
 	public static void getConnection() throws InstantiationException,
@@ -66,6 +65,8 @@ public class ProductServlet extends HttpServlet {
 
 			request.setAttribute("positive_reviews", getPositiveReviews(id));
 			request.setAttribute("negative_reviews", getNegativeReviews(id));
+			request.setAttribute("neutral_reviews", getNeutralReviews(id));
+
 			String[] arr = getNameAndImageUrl(id);
 			request.setAttribute("product_name", arr[0]);
 			request.setAttribute("product_img", arr[1]);
@@ -107,6 +108,8 @@ public class ProductServlet extends HttpServlet {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("positive", 0);
 		map.put("negative", 0);
+		map.put("neutral", 0);
+
 		while (resultSet.next()) {
 			map.put(resultSet.getString("x"), resultSet.getInt("count"));
 		}
@@ -134,17 +137,23 @@ public class ProductServlet extends HttpServlet {
 				review_title = text.substring(0, Math.min(150, text.length()));
 
 			map.put("display_text", review_title);
+			String tags = resultSet.getString("tags");
+			String[] arr1 = tags.split(",");
+			Gson gs = new Gson();
+			String txt = gs.toJson(arr1);
+			map.put("tags", tags);
 			arr.add(map);
 		}
 
 		return arr;
 	}
 
-	public ArrayList<HashMap<String, String>> getNegativeReviews(String id)
+	public ArrayList<HashMap<String, String>> getNeutralReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		String query = reviews + " where positivity<" + ProjectConstants.k1
-				+ " and retailer_id='" + id
-				+ "' and review_title!='' order by positivity desc limit 10";
+		String query = reviews + " where positivity<=" + ProjectConstants.k2
+				+ " and positivity >= " + ProjectConstants.k1
+				+ "and retailer_id='" + id
+				+ "'  order by positivity desc limit 10";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
 		ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
@@ -155,7 +164,48 @@ public class ProductServlet extends HttpServlet {
 			text = text.replace("\'", "");
 			text = text.replace("\"", "");
 			map.put("review", text);
-			map.put("display_text", resultSet.getString("review_title"));
+			String review_title = resultSet.getString("review_title");
+			if (review_title == null)
+				review_title = text.substring(0, Math.min(150, text.length()));
+
+			map.put("display_text", review_title);
+			String tags = resultSet.getString("tags");
+			String[] arr1 = tags.split(",");
+			Gson gs = new Gson();
+			String txt = gs.toJson(arr1);
+			map.put("tags", tags);
+			arr.add(map);
+		}
+
+		return arr;
+	}
+
+	public ArrayList<HashMap<String, String>> getNegativeReviews(String id)
+			throws SQLException, InstantiationException, IllegalAccessException {
+		String query = reviews + " where positivity<" + ProjectConstants.k1
+				+ " and retailer_id='" + id
+				+ "'  order by positivity desc limit 10";
+		System.out.println(query);
+		resultSet = statement.executeQuery(query);
+		ArrayList<HashMap<String, String>> arr = new ArrayList<HashMap<String, String>>();
+
+		while (resultSet.next()) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			String text = resultSet.getString("review");
+			text = text.replace("\'", "");
+			text = text.replace("\"", "");
+			map.put("review", text);
+
+			String review_title = resultSet.getString("review_title");
+			if (review_title == null)
+				review_title = text.substring(0, Math.min(150, text.length()));
+
+			map.put("display_text", review_title);
+			String tags = resultSet.getString("tags");
+			String[] arr1 = tags.split(",");
+			Gson gs = new Gson();
+			String txt = gs.toJson(arr1);
+			map.put("tags", tags);
 			arr.add(map);
 		}
 

@@ -160,6 +160,7 @@ vertical-align: top;}
 		</c:forEach>
 		</table>
 		
+			<c:if test="${fn:length(positive_reviews) > 0 }">
 				<div width = "100%">
 				<h2>Positive Reviews</h2>
 				<table border ="0" width="100%">
@@ -171,7 +172,12 @@ vertical-align: top;}
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
-			          ${entry.display_text }
+			          <div class="row">
+			          <div class="span7">${entry.display_text }</div>
+			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
+			          	<span class="label label-warning" >${entry1}</span> 
+			          </c:forEach></div>
+			          </div>
 			        </a>
 			      </h4>
 			    </div>
@@ -190,7 +196,52 @@ vertical-align: top;}
 					
 				</table>
 				</div>
-				<c:if test="${fn:length(negative_reviews) > 1 }">
+				
+				</c:if>
+				
+				<c:if test="${fn:length(neutral_reviews) > 0 }">
+					
+				<div>
+				
+				<h2>Neutral Reviews</h2>
+				<table border ="0" width="100%">
+				<c:forEach items="${neutral_reviews}" var="entry" varStatus="val">
+				 
+				 <tr><td style="padding: 3px" class="even">
+		 		<div class="panel-group" id="accordion">
+			  	<div class="panel panel-default">
+			    <div class="panel-heading">
+			      <h4 class="panel-title">
+			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseneg${val.count}">
+			          <div class="row">
+			          <div class="span7">${entry.display_text }</div>
+			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
+			          	<span class="label label-warning">${entry1}</span>
+			          </c:forEach></div>
+			          </div>
+			          
+			          
+			        </a>
+			      </h4>
+			    </div>
+			    <div id="collapseneg${val.count}" class="panel-collapse collapse ">
+			      <div class="panel-body">
+			        	${entry.review}
+			      </div>
+			    </div>
+			  </div>
+			  </div>						
+					
+               		</td></tr>
+				 
+					
+				</c:forEach>
+					
+				</table>
+				</div>
+				</c:if>
+				
+				<c:if test="${fn:length(negative_reviews) > 0 }">
 					
 				<div>
 				
@@ -204,7 +255,14 @@ vertical-align: top;}
 			    <div class="panel-heading">
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseneg${val.count}">
-			          ${entry.display_text }
+			          <div class="row">
+			          <div class="span7">${entry.display_text }</div>
+			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
+			          	<span class="label label-warning">${entry1}</span>
+			          </c:forEach></div>
+			          </div>
+			          
+			          
 			        </a>
 			      </h4>
 			    </div>

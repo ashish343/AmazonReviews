@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.ConnectUtil;
+import util.ProjectConstants;
 
 @WebServlet(name = "MyServlet", urlPatterns = { "/hello" })
 public class HelloServlet extends HttpServlet {
@@ -25,7 +26,11 @@ public class HelloServlet extends HttpServlet {
 	private static Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String posNegQuery = "select if(positivity>0,'positive','negative') x, count(*) count from product_reviews  group by x;";
+	private static final String posNegQuery = "select if(positivity>"
+			+ ProjectConstants.k2
+			+ ", 'positive',if(positivity<"
+			+ ProjectConstants.k1
+			+ ", 'negative', 'neutral')) x, count(*) count from product_reviews  group by x;";
 	private static final String reviews = "select review from ProductReviews ";
 
 	public static void getConnection() throws InstantiationException,
@@ -90,7 +95,11 @@ public class HelloServlet extends HttpServlet {
 		try {
 			getConnection();
 			statement = connect.createStatement();
+			System.out.println(posNegQuery);
 			resultSet = statement.executeQuery(posNegQuery);
+			map.put("positive", 0);
+			map.put("negative", 0);
+			map.put("neutral", 0);
 
 			while (resultSet.next()) {
 				map.put(resultSet.getString("x"), resultSet.getInt("count"));
