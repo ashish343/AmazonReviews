@@ -137,7 +137,8 @@ public class DeliveryServlet extends HttpServlet {
 					key = "Case";
 				else if (key.equals("return"))
 					key = "Return";
-
+				else
+					key = key.toLowerCase().trim();
 				if (!tmp.containsKey(key)) {
 					tmp.put(key, "0");
 				}

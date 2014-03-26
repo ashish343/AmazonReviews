@@ -27,9 +27,9 @@ public class HelloServlet extends HttpServlet {
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 	private static final String posNegQuery = "select if(positivity>"
-			+ ProjectConstants.k2
+			+ ProjectConstants.attribk2
 			+ ", 'positive',if(positivity<"
-			+ ProjectConstants.k1
+			+ ProjectConstants.attribk1
 			+ ", 'negative', 'neutral')) x, count(*) count from product_reviews  group by x;";
 	private static final String reviews = "select review from ProductReviews ";
 
@@ -154,7 +154,8 @@ public class HelloServlet extends HttpServlet {
 					key = "Case";
 				else if (key.equals("return"))
 					key = "Return";
-
+				else
+					key = key.toLowerCase().trim();
 				if (!tmp.containsKey(key)) {
 					tmp.put(key, "0");
 				}

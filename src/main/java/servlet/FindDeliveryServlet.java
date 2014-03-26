@@ -179,6 +179,8 @@ public class FindDeliveryServlet extends HttpServlet {
 			float polarity = resultSet.getFloat("polarity");
 
 			String review = resultSet.getString("review");
+			review = review.replaceAll(tag, "<span style='font-weight:bold;'>"
+					+ tag + "</span>");
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("review", review);
 

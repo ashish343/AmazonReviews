@@ -179,7 +179,7 @@ vertical-align: top;}
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapse${val.count}">
 			          <div class="row">
-			          <div class="span7">${entry.display_text }</div>
+			          <div class="span7">${entry.display_text} </div>
 			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
 			          <a href='/productReviews?id=${id}&tag=${entry1}'>	<div class="label label-warning styling" >${entry1}</div></a> 
 			          </c:forEach></div>
@@ -220,7 +220,7 @@ vertical-align: top;}
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapsenen${val.count}">
 			          <div class="row">
-			          <div class="span7">${entry.display_text }</div>
+			          <div class="span7">${entry.display_text} </div>
 			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
 			          	<a href='/productReviews?id=${id}&tag=${entry1}'><div class="label label-warning styling">${entry1}</div></a>
 			          </c:forEach></div>
@@ -262,7 +262,7 @@ vertical-align: top;}
 			      <h4 class="panel-title">
 			        <a data-toggle="collapse" data-parent="#accordion" href="#collapseneg${val.count}">
 			          <div class="row">
-			          <div class="span7">${entry.display_text }</div>
+			          <div class="span7">${entry.display_text} </div>
 			          <div class="span3"><c:forEach items="${entry.tags}" var="entry1" varStatus="val1">
 			          	<a href='/productReviews?id=${id}&tag=${entry1}'><span class="label label-warning styling">${entry1}</span></a>
 			          </c:forEach></div>

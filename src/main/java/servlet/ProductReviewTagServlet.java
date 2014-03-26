@@ -85,9 +85,9 @@ public class ProductReviewTagServlet extends HttpServlet {
 			throws ClassNotFoundException, SQLException,
 			InstantiationException, IllegalAccessException {
 		String posNegReviewCount = "select if(positivity>"
-				+ ProjectConstants.k2
+				+ ProjectConstants.attribk2
 				+ ", 'positive',if(positivity<"
-				+ ProjectConstants.k1
+				+ ProjectConstants.attribk1
 				+ ", 'negative', 'neutral')) x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' and tags like '%" + tag + "%' group by x;";
 		System.out.println(posNegReviewCount);
@@ -194,6 +194,8 @@ public class ProductReviewTagServlet extends HttpServlet {
 		ArrayList<Map<String, String>> reviews = new ArrayList<Map<String, String>>();
 		while (resultSet.next()) {
 			String text = resultSet.getString("review");
+			text = text.replaceAll(tag, "<span style='font-weight:bold;'>"
+					+ tag + "</span>");
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("review", text);
 			String review_title = resultSet.getString("review_title");
@@ -204,9 +206,9 @@ public class ProductReviewTagServlet extends HttpServlet {
 
 			map.put("display_text", review_title);
 			float pos = resultSet.getFloat("positivity");
-			if (pos < ProjectConstants.k1) {
+			if (pos < ProjectConstants.attribk1) {
 				map.put("categ", "-1");
-			} else if (pos > ProjectConstants.k2) {
+			} else if (pos > ProjectConstants.attribk2) {
 				map.put("categ", "1");
 			} else
 				map.put("categ", "0");

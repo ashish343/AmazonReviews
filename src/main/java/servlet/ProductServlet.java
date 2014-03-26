@@ -31,7 +31,7 @@ public class ProductServlet extends HttpServlet {
 	private static Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String reviews = "select tags, review, review_title from product_reviews ";
+	private static final String reviews = "select tags, review, review_title,positivity from product_reviews ";
 	private static final String attrib_reviews = "select attribute, score from product_attribute_stats ";
 
 	public static void getConnection() throws InstantiationException,
@@ -98,9 +98,9 @@ public class ProductServlet extends HttpServlet {
 			throws ClassNotFoundException, SQLException,
 			InstantiationException, IllegalAccessException {
 		String posNegReviewCount = "select if(positivity>"
-				+ ProjectConstants.k2
+				+ ProjectConstants.attribk2
 				+ ", 'positive',if(positivity<"
-				+ ProjectConstants.k1
+				+ ProjectConstants.attribk1
 				+ ", 'negative', 'neutral')) x, count(*) count from product_reviews where retailer_id='"
 				+ id + "' group by x;";
 		System.out.println(posNegReviewCount);
@@ -119,8 +119,8 @@ public class ProductServlet extends HttpServlet {
 
 	public ArrayList<HashMap<String, String>> getPositiveReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		String query = reviews + " where positivity>" + ProjectConstants.k2
-				+ " and retailer_id='" + id
+		String query = reviews + " where positivity>"
+				+ ProjectConstants.attribk2 + " and retailer_id='" + id
 				+ "'  order by positivity desc limit 10";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
@@ -142,6 +142,7 @@ public class ProductServlet extends HttpServlet {
 			Gson gs = new Gson();
 			String txt = gs.toJson(arr1);
 			map.put("tags", tags);
+			map.put("positivity", resultSet.getFloat("positivity") + "");
 			arr.add(map);
 		}
 
@@ -150,9 +151,9 @@ public class ProductServlet extends HttpServlet {
 
 	public ArrayList<HashMap<String, String>> getNeutralReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		String query = reviews + " where positivity<=" + ProjectConstants.k2
-				+ " and positivity >= " + ProjectConstants.k1
-				+ "and retailer_id='" + id
+		String query = reviews + " where positivity<="
+				+ ProjectConstants.attribk2 + " and positivity >= "
+				+ ProjectConstants.attribk1 + "and retailer_id='" + id
 				+ "'  order by positivity desc limit 10";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
@@ -174,6 +175,7 @@ public class ProductServlet extends HttpServlet {
 			Gson gs = new Gson();
 			String txt = gs.toJson(arr1);
 			map.put("tags", tags);
+			map.put("positivity", resultSet.getFloat("positivity") + "");
 			arr.add(map);
 		}
 
@@ -182,8 +184,8 @@ public class ProductServlet extends HttpServlet {
 
 	public ArrayList<HashMap<String, String>> getNegativeReviews(String id)
 			throws SQLException, InstantiationException, IllegalAccessException {
-		String query = reviews + " where positivity<" + ProjectConstants.k1
-				+ " and retailer_id='" + id
+		String query = reviews + " where positivity<"
+				+ ProjectConstants.attribk1 + " and retailer_id='" + id
 				+ "'  order by positivity desc limit 10";
 		System.out.println(query);
 		resultSet = statement.executeQuery(query);
@@ -206,6 +208,7 @@ public class ProductServlet extends HttpServlet {
 			Gson gs = new Gson();
 			String txt = gs.toJson(arr1);
 			map.put("tags", tags);
+			map.put("positivity", resultSet.getFloat("positivity") + "");
 			arr.add(map);
 		}
 
@@ -263,7 +266,8 @@ public class ProductServlet extends HttpServlet {
 			StringTokenizer st = new StringTokenizer(review, ",");
 
 			while (st.hasMoreTokens()) {
-				String token = st.nextToken().toLowerCase();
+				String token = st.nextToken().toLowerCase().trim();
+
 				if (hash.contains(token))
 					continue;
 				if (!tmp.containsKey(token))
