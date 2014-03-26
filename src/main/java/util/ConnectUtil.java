@@ -7,10 +7,10 @@ import java.sql.Statement;
 
 public class ConnectUtil {
 
-	public static String server = "127.0.0.1";
-	public static String user = "root";
-	public static String pass = "";
-	public static String db = "hack14";
+	public static String server = "us-cdbr-east-05.cleardb.net";
+	public static String user = "b174f8f64c67e5";
+	public static String pass = "d2a1f516";
+	public static String db = "heroku_e3f1160c4f489ca";
 
 	public static Object[] connect(Connection connect, Statement statement)
 			throws SQLException {
