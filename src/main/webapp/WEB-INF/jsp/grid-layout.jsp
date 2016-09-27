@@ -12,7 +12,7 @@
 		<%@ include file="/WEB-INF/jsp/js/pageJS.jsp" %>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-		<title>Walmart Review Monitor</title>
+		<title>Amazon Review Monitor</title>
 		<meta name="description" content="Blueprint: Vertical Icon Menu" />
 		<meta name="keywords" content="Vertical Icon Menu, vertical menu, icons, menu, css" />
 		<meta name="author" content="Codrops" />
@@ -38,7 +38,7 @@
 		<div class="container">
 			<header class="clearfix">
 				
-				<h1>Walmart Review Monitor</h1>
+				<h1>Amazon Review Monitor</h1>
 							</header>
 			<%@ include file="/WEB-INF/jsp/menu.jsp" %>
 			<div class="main">
