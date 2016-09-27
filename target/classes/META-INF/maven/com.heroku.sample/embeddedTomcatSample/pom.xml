@@ -10,7 +10,6 @@
     <tomcat.version>7.0.34</tomcat.version>
   </properties>
 
-
   <dependencies>
   <dependency>
 	<groupId>mysql</groupId>
